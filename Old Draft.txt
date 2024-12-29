@@ -1,0 +1,299 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{array}
+\usepackage{tabto}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\begin{document}
+
+\title{Adaptive Traffic Signal Management Using Real-Time Vehicle Detection and Tracking\\
+}
+
+\author{
+\IEEEauthorblockN{
+\begin{minipage}[t]{0.45\textwidth}
+\centering
+1\textsuperscript{st} Sarvesh Shirulkar \\
+\textit{Dept. of Electronics and Computer Science} \\
+\textit{Shri Ramdeobaba College of Engineering and Management} \\
+Nagpur, India \\
+shirulkarsa@rknec.edu
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
+\centering
+2\textsuperscript{nd} Rishabhdev Makode \\
+\textit{Dept. of Electronics and Computer Science} \\
+\textit{Shri Ramdeobaba College of Engineering and Management} \\
+Nagpur, India \\
+makoderg@rknec.edu
+\end{minipage}
+}
+\\[2ex]
+\begin{minipage}[t]{0.45\textwidth}
+\centering
+3\textsuperscript{rd} Dr. Richa Khandelwal \\
+\textit{Dept. of Electronics Engineering} \\
+\textit{Ramdeobaba University} \\
+Nagpur, India \\
+khandelwalrr@rknec.edu
+\end{minipage}
+
+
+}
+
+\maketitle
+
+\begin{abstract}
+Traffic congestion is one of the major problems in urban areas that causes severe delays, increased fuel consumption, and increased harmful gas emissions.  The traditional approach or conventional traffic signal systems work at fixed timings without considering dynamic variations within traffic and contribute to it. This paper will be on an adaptive traffic signal control system using the YOLO, or You Only Look Once algorithm, object detection to change the timing of its signals in real-time according to actual traffic flow conditions. This system instals real-time vehicle detection and tracking at intersections so that the system can also, based on intelligent management of traffic, extend or reduce green light periods based upon volume and variability of vehicle types. The designed system aims towards a scenario where vehicle recognition and tracking can be done efficiently yet may involve rapid adaptation to continually changing traffic situations. The paper describes the design and implementation of the YOLO algorithm, the mechanism used to track vehicles, and a system performance evaluation within a simulated environment. The finding points to a superior approach to traffic management along with less traffic congestion through the system with an overall efficacy in management, hence promising to be a solution to smart city traffic control. 
+  \\
+\end{abstract}
+\begin{IEEEkeywords}
+\textit{traffic signal control, YOLO, object detection, real-time traffic, vehicle tracking, congestion reduction, urban traffic.}
+\end{IEEEkeywords}
+
+\section{Introduction}
+
+In India, urbanization has increased rapidly, and the number of vehicles has grown about 8.8\% per year in the past decade. This has greatly overloaded roads, worsening already critical traffic congestion and delay problems in cities like Delhi, Mumbai, and Bangalore. The conventional fixed-cycle traffic signal systems cannot respond quickly to traffic demand at any given time and thus worsen traffic flow efficiencies. These delays translate into an estimated 1.5–2\% loss in India's GDP every year in the form of fuel wastage and lost productivity besides an alarming increase in vehicular emissions.
+
+Based on the actual real-time detection of vehicles using the YOLO algorithm, this study will dynamically adjust traffic light cycles according to the actual traffic density at intersections with the proposed intelligent traffic management platform to overcome conventional traffic signal control. The system will optimize the flow of traffic with congested traffic and delay in mind by identifying vehicle types and hence their counts and modulating intervals of green lights.
+
+While an intelligent system would, undoubtedly, mitigate traffic bottlenecks, it would also limit fuel consumption—a vital advantage in India, as transport emissions account for 13\% of the country's greenhouse gas emission. Such a system could, thus, promote India's vision for smart, sustainable urban transport through effective traffic flow, through accurate vehicle detection and adaptive signal timings, on their way to smarter cities across the country.
+
+
+
+The recent advancement in AI, deep learning, and IoT facilitates adaptive efficient control to empower the transformation of traffic management systems. Recently, adaptive frameworks for real-time adaptive traffic management involving AI have been proposed and implemented in Gandhi et al. (2020) [2] and Jonnalagadda et al. (2020) [1], where signal timings are dynamically adapted from vehicle counts to reduce congestion. A closer system comes from Jaiswal et al. (2020) [3] that focuses on emergency vehicles.
+
+Samal et al. (2020) [4] contributed to the analysis of traffic flow by carrying out PCU analyses. This helped in the better quantification and management of traffic density. Further, Ahmed et al. (2019) [5] and Rabby et al. (2019) [6] mentioned how IoT assists in data gathering and makes it responsive to traffic. Javaid et al. (2018) [7] also mentioned how IoT can make vehicle detection more precise.
+
+Papers like Tian et al. (2019) [8] and Kumar et al. (2020) [9] revealed tendencies of studies and models for monitoring the accuracy evaluation and possible use of YOLO and FCOS object detection models in real-time applications where Varma et al. (2019) [11], Ghoreyshi et al. (2020) [12], etc., provided datasets or models customized towards urban environments for better enhancements in the robustness of detection. Dubey et al. (2017) [13], Nodado et al. (2019) [14] studied the implementation of IoT-based adaptive traffic systems and computer vision solutions to be controlled better. Asmara et al. (2020) [15] showed that low-cost devices could be effectively used to predict traffic density, and Nallaperuma et al. (2019) [16] presented an incremental ML platform for big data-driven traffic management.
+
+\section{Methodology}
+
+\begin{figure}[htbp]
+    \raggedleft
+    \includegraphics[width=0.5\textwidth,keepaspectratio]{edited.png}
+    \caption{A Flowchart Illustrating Adaptive Traffic Signal Management System.}
+    \label{fig}
+\end{figure}
+
+
+\subsection{Traffic Signal Control Setup}
+The study utilizes a real-time vehicle detection, tracking, and density-based signal adjustment based on an intelligent modular traffic signal control system to optimize signal timing. Four video feeds representing one specific direction of a traffic junction are captured and processed in real-time to simulate a multi-lane junction, where each feed processes independent vehicle detection, tracking, and classification by type to ensure customized signal timing based on the real-time traffic conditions.
+
+
+\subsection{Vehicle Type Detection Using the YOLO Algorithm}
+The YOLO deep learning algorithm is used to perform vehicle detection. It is successful in the one pass of real-time object detection, as it provides both speed and precision, and its task consists of setting up the weights and configuration files of the YOLO model for the types of vehicles, such as cars, motorbikes, and trucks. All vehicle classes are assigned a weight known as the Passenger Car Unit, which is taken as a unit in the calculation of traffic density and to take into account the varying dimensions of vehicles and their influence on the movement of traffic. Cars and autos are treated equally, and buses and trucks are treated equally in detection.
+
+
+\begin{figure}[htbp]
+    \raggedleft
+    \includegraphics[width=0.485\textwidth,keepaspectratio]{typeDetect.png}
+    \caption{Type-wise Object Detection of Vehicles.}
+    \label{fig}
+\end{figure}
+
+\subsection{Road Bounding Box and Centroid Tracking}
+Custom bounding boxes were defined on every video feed to mark areas on the roads where specific vehicles may be detected and counted. This would only count those falling inside the lanes since most times, the periphery or non-relevant features of each frame can likely to contribute to false positives. Thus, centroid tracking is useful to have a consistent tracking of individual items to frames, obtaining a unique ID based on the position of the centroid for avoiding duplicate counts. This means that it is viewed as the same object when the centroid between three frames does not change.
+
+\subsection{Vehicle Counting and PCU-Weighted Density Calculation} 
+After the detection and classification of vehicles, each frame provides a count and estimation of the density of flow with PCU weights. This results in an accurate representation of effective load at every lane. Vehicles that are bigger in size, like trucks, are also considered by obtaining their relevant weight. Such a density data is significant as it is used in determining green signal time, especially in busy intersections where traffic load is dynamically changing.
+
+\begin{table}[htbp]
+    \caption{Passenger Car Unit (PCU) factors for different vehicles}
+    \centering
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|>{\centering\arraybackslash}p{2.4cm}|>{\centering\arraybackslash}p{2.4cm}|}
+        \hline
+        \textbf{Vehicle Type} & \textbf{PCU}\\
+        \hline
+        Car / Auto & 1  \\
+        \hline
+        Truck / Bus & 3  \\
+        \hline
+        Bike / Scooter & 0.75 \\
+        \hline
+    \end{tabular}
+    \label{tab:signal_timing_efficiency}
+\end{table}
+
+\subsection{Dynamic Green Signal Timer Calculation}
+The dynamic modification of the green signal is achieved through real-time changes in the signal timings based on the load detected by the vehicle. The weight used to calculate traffic density by PCU informs the length of the green signal for each feed. The approach dynamically eliminates normal inefficiencies of fixed-timing signals, adapting to real conditions and facilitating a smoother flow of traffic and less congestion. The time for the green signal is converted into an integer as in the following formula:
+\begin{equation}
+G = B + (P \cdot E) \label{eq:signal_timing}
+\end{equation}
+Where:\\
+\hspace*{1.5cm}
+ \( G \) : Green signal time \\ 
+\hspace*{1.5cm} 
+ \( B \) : Base time \\ 
+\hspace*{1.5cm} 
+ \( P \) : Total PCU (Passenger Car Unit) count \\ 
+\hspace*{1.5cm}
+ \( E \) : Extra time per PCU \\
+
+To better illustrate how this calculation works in the real world, consider a busy intersection that has four lanes: Northbound, Eastbound, Southbound, and Westbound. In one scenario, the following counts of vehicles were measured (in PCUs) over a stated period:\\
+
+ 
+Northbound Lane : 10 cars and 5 buses (totaling 25 PCUs)\\
+Eastbound Lane : 15 cars and 2 motorcycles (16.5 PCUs)\\
+Southbound Lane : 7 motorcycles and 2 trucks (totaling 11.25 PCUs)\\
+Westbound Lane : 8 cars (totaling 8 PCUs)
+
+
+Using Eqn.(1) with a base time 
+\( B = 5 \) seconds and an extra time per PCU 
+\( E = 2 \) seconds, the green signal times for each lane can be calculated as follows:\\ 
+
+\textbf{Northbound Lane:}
+
+
+Total PCU =  \( (10 \cdot 1) + (5 \cdot 3) = 25 \) \\
+Green signal time :
+\[
+G = 5 + (25 \cdot 2) = 55 \text{ seconds}
+\]
+
+\textbf{Eastbound Lane:}
+
+Total PCU =  \( (15 \cdot 1) + (2 \cdot 0.75) = 16.5 \) \\
+Green signal time 
+\[
+G = 5 + (16.5 \cdot 2) = 38 \text{ seconds}
+\]
+
+\textbf{Southbound Lane:}
+
+Total PCU = \( (2 \cdot 3) + (7 \cdot 0.75) = 11.25 \) \\
+Green signal time 
+\[
+G = 5 + (11.25 \cdot 2) = 27 \text{ seconds}
+\]
+
+\textbf{Westbound Lane:}
+
+Total PCU = \( (8 \cdot 1) = 8 \) \\
+Green signal time 
+\[
+G = 5 + (8 \cdot 2) = 21 \text{ seconds}
+\]
+
+
+
+\subsection{Signal Interconnection for Coordinated Signal Timing}
+Along with single-point optimization, interconnection logic is applied to coordinate signals across adjacent lanes. The concept stated in this regard is the computation of green signal timings based on aggregate traffic loads across multiple directions to optimize the balancing of green signal durations and to avoid bottlenecks. The system adjusts the green light duration in a coordinated fashion through analyzing vehicle density in adjoining lanes, allowing interconnected signals to respond jointly to overall conditions. This adaptive interconnect ensures traffic flows more consistently throughout the network, distributing green light durations based on cumulative congestion instead of isolated conditions at each individual signal.
+
+\begin{figure}[htbp]
+    \raggedleft
+    \includegraphics[width=0.485\textwidth,keepaspectratio]{Interconnection2.png}
+    \caption{Interconnection for Coordinated Signal Timing.}
+    \label{fig}
+\end{figure}
+
+\subsection{Final Output and Display Configuration}
+All of these-processed frames, vehicle counts, and adjusted green signal times-will all display on a 2x2 matrix consolidated screen. Each processed frame will include annotations with a vehicle count and dynamic green time to provide clear and continuous feedback about traffic flow and signal adaptations.
+ 
+
+\section{Conclusion}
+This adaptive traffic signal system adjusts green times dynamically to optimize efficiency in real-time vehicle counts. This greatly reduces congestion and waiting times at intersections in high-density situations. The solution entails automated adjustment to signal instances and has the potential to optimize urban traffic flow and improve road safety features and support infrastructures for future smart cities.
+\begin{figure*}[htbp]
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{ss2.png}
+    \caption{Final Output with Vehicle Count and Green time.}
+    \label{fig}
+\end{figure*} 
+
+
+
+The following example is a demonstration of improvement in traffic flow efficiency based on dynamic adjustment of signal times. The system effectively reduces waiting times by adjusting the green signal time based on the number and type of vehicles.
+
+\begin{table}[htbp]
+    \caption{Table of Signal Timing Efficiency}
+    \centering
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|p{2cm}|p{1cm}|p{1.5cm}|p{1.5cm}|p{1cm}|}
+        \hline
+        \textbf{Lane Direction} & \textbf{Static Time (s)} & \textbf{Dynamic Signal Time (s)} & \textbf{Waiting Time Reduced (\%)} \\
+        \hline
+        Northbound &  30 & 35 & \textbf{-}\\
+        \hline
+        Eastbound & 30 & 28 &  6\%\\
+        \hline
+        Southbound & 30  & 18 & 40\% \\
+        \hline
+        Westbound & 30 & 26 & 13\% \\
+        \hline
+        \textbf{Total Efficiency Improved} & \textbf{120} & \textbf{107} & \textbf{10\%} \\
+        \hline
+    \end{tabular}
+    \label{tab:signal_timing_efficiency}
+\end{table}
+
+From Table II, it can be easily observed how the dynamic signal timing system outperforms the traditional systems in terms of reducing waiting times and improving traffic flow. The traditional systems used a static time of 30 seconds per lane and total 120 seconds per cycle. On the other hand, the dynamic system adjusts the time for green lights on a real-time calculated traffic density. This reduces the total cycle time from 120 seconds to 107 seconds-an increase of 10\% in overall efficiency. The waiting time decreased by the most in the southbound lane, at 40\%, which also recorded the highest vehicle density. The dynamic system, thus proves effective in reducing the high density of traffic congested areas.
+
+At other times, the green light for the northbound lane lasted longer than the predefined time of the old system, which proves that the dynamic system is more elastic and can adjust to a variety of traffic patterns. These results demonstrate the elasticity of the dynamic system to optimize signal timing in real-time to meet the requirements of each lane, therefore managing traffic better in different directions. \\ \\ \\ 
+ 
+ \begin{figure}[htbp]
+    \raggedleft
+    \includegraphics[width=0.485\textwidth,keepaspectratio]{pieNew.png}
+    \caption{Comparision of (a) Traditional and (b) Dynamic Signal Timing.}
+    \label{fig}
+\end{figure}
+
+The dynamic system is further explained in Figure (b) where it saves 13 seconds per cycle compared to the traditional system shown in Figure (a). In the traditional system, each lane gets an equal 30-second duration, but in the dynamic system, it redistributes this time according to the actual traffic demand, which reduces the total cycle time to 107 seconds. This 13 seconds saving is visually represented as a distinct segment in the pie chart, showing that the system is able to reallocate resources effectively while improving overall traffic flow.
+
+In general, the results indicate that adaptive traffic management can significantly improve urban traffic efficiency as a responsive and scalable solution to handle changing conditions in traffic. Wider application may lead to further improvement in mobility in cities and less negative environmental impact.
+
+\section{Future Scope}
+The proposed system offers approaches for future development.
+Once developed further, the technology would be deployed with the purpose of identifying emergency vehicles and modifying their movement by changing the duration of time allowed by the signals in real time, at all intersections.
+
+The system can be enhanced to detect accidents or any other occurrence at intersections or roadsides and notify traffic control authorities expeditiously in a real-time manner.
+
+\begin{thebibliography}{00}
+\bibitem{b1} M. Jonnalagadda, S. Taduri and R. Reddy, "RealTime Traffic Management System Using Object Detection based Signal Logic," 2020 IEEE Applied Imagery Pattern Recognition Workshop (AIPR), Washington DC, DC, USA, 2020, pp. 1-5, doi: 10.1109/AIPR50011.2020.9425070.
+\bibitem{b2} M. M. Gandhi, D. S. Solanki, R. S. Daptardar and N. S. Baloorkar, "Smart Control of Traffic Light Using Artificial Intelligence," 2020 5th IEEE International Conference on Recent Advances and Innovations in Engineering (ICRAIE), Jaipur, India, 2020, pp. 1-6, doi: 10.1109/ICRAIE51050.2020.9358334.
+\bibitem{b3} M. Jaiswal, N. Gupta and A. Rana, "Real-time Traffic Management in Emergency using Artificial Intelligence," 2020 8th International Conference on Reliability, Infocom Technologies and Optimization (Trends and Future Directions) (ICRITO), Noida, India, 2020, pp. 699-702, doi: 10.1109/ICRITO48877.2020.9197856.
+
+\bibitem{b4} S R Samal et al 2020 IOP Conf. Ser.: Mater. Sci. Eng. 1006 012002. DOI 10.1088/1757-899X/1006/1/012002
+
+\bibitem{b5} S. Ahmed, M. Ilyas, and M. Y. A. Raja, "Smart Living: Ubiquitous Services Powered by Ambient Intelligence (AmI)," 2019 IEEE 16th International Conference on Smart Cities: Improving Quality of Life Using ICT \& IoT and AI (HONET-ICT), Charlotte, NC, USA, 2019, pp. 043-048, doi: 10.1109/HONET.2019.8908054.
+
+\bibitem{b6} M. K. M. Rabby, M. M. Islam and S. M. Imon, "A Review of IoT Application in a Smart Traffic Management System," 2019 5th International Conference on Advances in Electrical Engineering (ICAEE), Dhaka, Bangladesh, 2019, pp. 280-285, doi: 10.1109/ICAEE48663.2019.8975582.
+
+\bibitem{b7} S. Javaid, A. Sufian, S. Pervaiz and M. Tanveer, "Smart traffic management system using Internet of Things," 2018 20th International Conference on Advanced Communication Technology (ICACT), Chuncheon, Korea (South), 2018, pp. 1-1, doi: 10.23919/ICACT.2018.8323769.
+
+\bibitem{b8} Tian, Z., et al. (2019). FCOS: Fully Convolutional One-Stage Object Detection. IEEE International Conference on Computer Vision. DOI: 10.1109/ICCV.2019.00972
+
+\bibitem{b9} Kumar, B. C., Punitha, R., and Mohana (2020). YOLOv3 and YOLOv4: Multiple Object Detection for Surveillance Applications. 3rd International Conference on Smart Systems and Inventive Technology (ICSSIT). DOI: 10.1109/ICSSIT48917.2020.9214094
+
+
+\bibitem{b10} Tarimo, W., Sabra, M., and Hendre, S. (2020). Real-Time Deep Learning-Based Object Detection Framework. IEEE Symposium Series on Computational Intelligence (SSCI). DOI: 10.1109/SSCI47803.2020.9308493
+
+
+\bibitem{b11} Varma, G., et al. (2019). IDD: A Dataset for Exploring Problems of Autonomous Navigation in Unconstrained Environments. 2019 IEEE Winter Conference on Applications of Computer Vision (WACV). DOI: 10.1109/WACV.2019.00190
+
+\bibitem{b12} Ghoreyshi, A. M., Akhavanpour, A., and Bossaghzadeh, A. (2020). Simultaneous Vehicle Detection and Classification Model Based on Deep YOLO Networks. Iranian Conference on Machine Vision and Image Processing (MVIP). DOI: 10.1109/MVIP49855.2020.9116922
+
+\bibitem{b13} Dubey, A., et al. (2017). Internet of Things-Based Adaptive Traffic Management System as Part of Intelligent Transportation System (ITS). International Conference on Soft Computing and its Engineering Applications (icSoftComp). DOI: 10.1109/ICSOFTCOMP.2017.8280081
+
+\bibitem{b14} Nodado, J. T. G., et al. (2019). Intelligent Traffic Light System Using Computer Vision with Android Monitoring and Control. IEEE Region 10 Annual International Conference, TENCON. DOI: 10.1109/TENCON.2018.8650084
+
+
+\bibitem{b15} Asmara, R. A., et al. (2020). Prediction of Traffic Density Using YOLO Object Detection Implemented on Raspberry Pi 3B+ and Intel NCS 2. 4th International Conference on Vocational Education and Training (ICOVET). DOI: 10.1109/ICOVET50258.2020.9230145
+
+\bibitem{b16} D. Nallaperuma et al., "Online Incremental Machine Learning Platform for Big Data-Driven Smart Traffic Management," in IEEE Transactions on Intelligent Transportation Systems, vol. 20, no. 12, pp. 4679-4690, Dec. 2019, doi: 10.1109/TITS.2019.2924883.
+
+\end{thebibliography}
+\vspace{12pt}
+
+
+\end{document}
